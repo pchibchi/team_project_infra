@@ -34,7 +34,7 @@ cluster_name    = ""
 # RDS (MySQL)
 # -------------------------
 db_identifier             = "mysql"
-db_name                   = "ordersystem"
+db_name                   = "ordermsa"
 db_engine                 = "mysql"
 db_engine_version         = "8.0"
 db_major_engine_version   = "8.0"
@@ -103,13 +103,13 @@ bastion_instance_type = "t3.micro"
 bastion_key_name      = "my-key-pair" #본인 key pair로 이름 변경
 
 bastion_allowed_ssh_cidr_blocks = [
-  "162.120.184.59/32" #본인 공인 ip 기입
+  "0.0.0.0/0" #본인 공인 ip 기입
 ]
 
 # -------------------------
 # EKS
 # -------------------------
-eks_cluster_name = "my-cluster-woo"
+eks_cluster_name = "my-cluster"
 
 eks_cluster_version = "1.31"
 

@@ -1,4 +1,4 @@
 region              = "ap-northeast-2"
 environment         = "dev"
-bucket_name         = "my-project-terraform-state-398875891485"
-dynamodb_table_name = "my-project-terraform-lock"
+bucket_name         = "teamproject-state-921203910441"
+dynamodb_table_name = "teamproject-lock"
