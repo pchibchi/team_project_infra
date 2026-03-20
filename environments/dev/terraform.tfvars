@@ -111,7 +111,7 @@ bastion_allowed_ssh_cidr_blocks = [
 # -------------------------
 # EKS
 # -------------------------
-eks_cluster_version = "1.31"
+eks_cluster_version = "1.35"
 
 eks_endpoint_private_access = true
 eks_endpoint_public_access  = true
