@@ -30,6 +30,14 @@
   * 생성한 **Key Pair 이름**
     → 반드시 수정 필요
 
+* bootstrap/backend/terraform.tfvars 설정:
+
+  * s3 버킷 이름 **본인 ID or 본인이 사용할 버킷 이름으로 변경**
+
+* .github/workflows 파일 설정:
+
+  * workflow 설정 **본인 github 및 oidc 설정 이후 role에 맞게 설정**
+
 ---
 
 ## 🏗️ 1. Backend 인프라 구성 (State 관리)

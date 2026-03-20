@@ -5,36 +5,45 @@ env          = "dev"
 # -------------------------
 # VPC
 # -------------------------
-vpc_cidr = "10.20.0.0/16"
+vpc_cidr = "10.0.0.0/16"
+
+public_subnets = [
+  "10.0.1.0/24",
+  "10.0.2.0/24"
+]
+
+private_app_subnets = [
+  "10.0.12.0/22",
+  "10.0.16.0/22"
+]
+
+private_db_subnets = [
+  "10.0.24.0/24",
+  "10.0.25.0/24"
+]
 
 azs_public = [
   "ap-northeast-2a",
   "ap-northeast-2c"
 ]
 
-azs_private = [
+azs_private_app = [
   "ap-northeast-2a",
   "ap-northeast-2c"
 ]
 
-public_subnets = [
-  "10.20.1.0/24",
-  "10.20.2.0/24"
+azs_private_db = [
+  "ap-northeast-2a",
+  "ap-northeast-2c"
 ]
 
-private_subnets = [
-  "10.20.10.0/24",
-  "10.20.11.0/24"
-]
-
-enable_eks_tags = false
-cluster_name    = ""
+cluster_name = "my-cluster-team03"
 
 # -------------------------
 # RDS (MySQL)
 # -------------------------
 db_identifier             = "mysql"
-db_name                   = "ordermsa"
+db_name                   = "ordersystem"
 db_engine                 = "mysql"
 db_engine_version         = "8.0"
 db_major_engine_version   = "8.0"
@@ -54,7 +63,7 @@ db_storage_throughput    = null
 db_storage_encrypted     = true
 db_kms_key_id            = null
 
-db_publicly_accessible = true
+db_publicly_accessible = false
 db_multi_az            = false
 db_availability_zone   = null
 
@@ -84,37 +93,29 @@ db_ca_cert_identifier = null
 db_license_model      = null
 db_character_set_name = null
 
-db_allowed_cidr_blocks = [
-  "10.20.0.0/16"
-]
-
-db_allowed_security_group_ids = []
-
 db_parameters = []
 
 db_create_option_group = false
 db_options             = []
 
-
 # -------------------------
 # Bastion
 # -------------------------
 bastion_instance_type = "t3.micro"
-bastion_key_name      = "my-key-pair" #본인 key pair로 이름 변경
+bastion_key_name      = "my-key-pair"
 
 bastion_allowed_ssh_cidr_blocks = [
-  "0.0.0.0/0" #본인 공인 ip 기입
+  "162.120.184.59/32"
 ]
 
 # -------------------------
 # EKS
 # -------------------------
-eks_cluster_name = "my-cluster"
-
 eks_cluster_version = "1.31"
 
 eks_endpoint_private_access = true
 eks_endpoint_public_access  = true
+
 eks_public_access_cidrs = [
   "0.0.0.0/0"
 ]
@@ -133,6 +134,7 @@ eks_authentication_mode                         = "API_AND_CONFIG_MAP"
 eks_bootstrap_cluster_creator_admin_permissions = true
 eks_auto_mode_enabled                           = false
 
+eks_access_principal_arn = "arn:aws:iam::683668078297:user/512-team03"
 # -------------------------
 # ECR
 # -------------------------
@@ -149,3 +151,4 @@ ecr_force_delete            = true
 ecr_encryption_type         = "AES256"
 ecr_kms_key_arn             = null
 ecr_create_lifecycle_policy = true
+

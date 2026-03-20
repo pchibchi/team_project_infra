@@ -19,9 +19,24 @@ variable "vpc_id" {
   type        = string
 }
 
-variable "subnet_ids" {
-  description = "Subnet IDs for EKS cluster and node group"
+variable "cluster_subnet_ids" {
+  description = "Subnet IDs for EKS cluster"
   type        = list(string)
+
+  validation {
+    condition     = length(var.cluster_subnet_ids) >= 2
+    error_message = "cluster_subnet_ids must contain at least two subnet IDs."
+  }
+}
+
+variable "node_subnet_ids" {
+  description = "Subnet IDs for EKS managed node group"
+  type        = list(string)
+
+  validation {
+    condition     = length(var.node_subnet_ids) >= 2
+    error_message = "node_subnet_ids must contain at least two subnet IDs."
+  }
 }
 
 variable "endpoint_private_access" {
@@ -112,4 +127,10 @@ variable "eks_auto_mode_enabled" {
   description = "Enable EKS Auto Mode"
   type        = bool
   default     = false
+}
+
+variable "admin_principals" {
+  description = "Map of named IAM principal ARNs to grant EKS cluster admin access via access entries"
+  type        = map(string)
+  default     = {}
 }

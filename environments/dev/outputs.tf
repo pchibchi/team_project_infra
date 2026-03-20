@@ -8,9 +8,14 @@ output "public_subnet_ids" {
   value       = module.vpc.public_subnet_ids
 }
 
-output "private_subnet_ids" {
-  description = "Private subnet IDs"
-  value       = module.vpc.private_subnet_ids
+output "private_app_subnet_ids" {
+  description = "Private app subnet IDs"
+  value       = module.vpc.private_app_subnet_ids
+}
+
+output "private_db_subnet_ids" {
+  description = "Private DB subnet IDs"
+  value       = module.vpc.private_db_subnet_ids
 }
 
 output "db_endpoint" {
@@ -31,6 +36,11 @@ output "db_port" {
 output "db_name" {
   description = "RDS database name"
   value       = module.rds.db_name
+}
+
+output "db_subnet_group_name" {
+  description = "RDS DB subnet group name"
+  value       = module.rds.db_subnet_group_name
 }
 
 output "rds_security_group_id" {
@@ -68,9 +78,19 @@ output "eks_cluster_security_group_id" {
   value       = module.eks.cluster_security_group_id
 }
 
+output "eks_node_security_group_id" {
+  description = "EKS node security group ID"
+  value       = module.eks.node_security_group_id
+}
+
 output "eks_node_group_name" {
   description = "EKS node group name"
   value       = module.eks.node_group_name
+}
+
+output "eks_oidc_issuer" {
+  description = "EKS OIDC issuer URL"
+  value       = module.eks.cluster_oidc_issuer
 }
 
 output "ecr_repository_urls" {

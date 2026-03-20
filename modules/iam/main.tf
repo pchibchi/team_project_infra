@@ -14,8 +14,8 @@ resource "aws_iam_openid_connect_provider" "eks" {
   ]
 }
 
-resource "aws_iam_role" "cluster_autoscaler" {
 
+resource "aws_iam_role" "cluster_autoscaler" {
   name = "cluster-autoscaling-role"
 
   assume_role_policy = jsonencode({
@@ -39,22 +39,17 @@ resource "aws_iam_role" "cluster_autoscaler" {
 }
 
 resource "aws_iam_role_policy_attachment" "eks_cluster_policy" {
-
   role       = aws_iam_role.cluster_autoscaler.name
   policy_arn = "arn:aws:iam::aws:policy/AmazonEKSClusterPolicy"
-
 }
 
 resource "aws_iam_role_policy_attachment" "ec2_full" {
-
   role       = aws_iam_role.cluster_autoscaler.name
   policy_arn = "arn:aws:iam::aws:policy/AmazonEC2FullAccess"
-
 }
 
 resource "aws_iam_role_policy_attachment" "autoscaling_full" {
-
   role       = aws_iam_role.cluster_autoscaler.name
   policy_arn = "arn:aws:iam::aws:policy/AutoScalingFullAccess"
-
 }
+

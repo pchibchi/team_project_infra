@@ -8,9 +8,14 @@ output "public_subnet_ids" {
   value       = aws_subnet.public[*].id
 }
 
-output "private_subnet_ids" {
-  description = "Private subnet IDs"
-  value       = aws_subnet.private[*].id
+output "private_app_subnet_ids" {
+  description = "Private app subnet IDs"
+  value       = aws_subnet.private_app[*].id
+}
+
+output "private_db_subnet_ids" {
+  description = "Private db subnet IDs"
+  value       = aws_subnet.private_db[*].id
 }
 
 output "internet_gateway_id" {
@@ -24,11 +29,16 @@ output "nat_gateway_id" {
 }
 
 output "public_route_table_id" {
-  description = "Public Route Table ID"
+  description = "Public route table ID"
   value       = aws_route_table.public.id
 }
 
-output "private_route_table_id" {
-  description = "Private Route Table ID"
-  value       = aws_route_table.private.id
+output "private_app_route_table_id" {
+  description = "Private app route table ID"
+  value       = aws_route_table.private_app.id
+}
+
+output "private_db_route_table_id" {
+  description = "Private db route table ID"
+  value       = aws_route_table.private_db.id
 }

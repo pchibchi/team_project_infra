@@ -4,14 +4,14 @@ on:
   workflow_dispatch:
     inputs:
       confirm_destroy:
-        description: "Type DESTROY to destroy all dev infrastructure"
+        description: 'Type DESTROY to destroy all dev infrastructure'
         required: true
-        default: "NO"
+        default: 'NO'
 
 permissions:
   id-token: write
   contents: read
-
+  
 jobs:
   terraform-destroy:
     if: github.event.inputs.confirm_destroy == 'DESTROY'
@@ -31,7 +31,7 @@ jobs:
       - name: Configure AWS Credentials
         uses: aws-actions/configure-aws-credentials@v4
         with:
-          role-to-assume: arn:aws:iam::921203910441:role/github-actions-terraform-role
+          role-to-assume: arn:aws:iam::683668078297:role/githubActionRole
           aws-region: ap-northeast-2
 
       - name: Terraform Init

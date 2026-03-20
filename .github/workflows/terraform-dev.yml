@@ -3,16 +3,16 @@ name: Terraform Dev
 on:
   pull_request:
     paths:
-      - "environments/dev/**"
-      - "modules/**"
-      - ".github/workflows/terraform-dev.yml"
+      - 'environments/dev/**'
+      - 'modules/**'
+      - '.github/workflows/terraform-dev.yml'
   push:
     branches:
       - main
     paths:
-      - "environments/dev/**"
-      - "modules/**"
-      - ".github/workflows/terraform-dev.yml"
+      - 'environments/dev/**'
+      - 'modules/**'
+      - '.github/workflows/terraform-dev.yml'
   workflow_dispatch:
     inputs:
       action:
@@ -27,7 +27,7 @@ on:
 permissions:
   id-token: write
   contents: read
-
+  
 jobs:
   terraform:
     runs-on: ubuntu-latest
@@ -46,7 +46,7 @@ jobs:
       - name: Configure AWS Credentials
         uses: aws-actions/configure-aws-credentials@v4
         with:
-          role-to-assume: arn:aws:iam::921203910441:role/github-actions-terraform-role
+          role-to-assume: arn:aws:iam::683668078297:role/githubActionRole
           aws-region: ap-northeast-2
 
       - name: Terraform Init

@@ -21,36 +21,39 @@ variable "vpc_cidr" {
   type        = string
 }
 
+variable "public_subnets" {
+  description = "Public subnet CIDR blocks"
+  type        = list(string)
+}
+
+variable "private_app_subnets" {
+  description = "Private app subnet CIDR blocks"
+  type        = list(string)
+}
+
+variable "private_db_subnets" {
+  description = "Private DB subnet CIDR blocks"
+  type        = list(string)
+}
+
 variable "azs_public" {
   description = "Availability zones for public subnets"
   type        = list(string)
 }
 
-variable "azs_private" {
-  description = "Availability zones for private subnets"
+variable "azs_private_app" {
+  description = "Availability zones for private app subnets"
   type        = list(string)
 }
 
-variable "public_subnets" {
-  description = "Public subnet CIDRs"
+variable "azs_private_db" {
+  description = "Availability zones for private DB subnets"
   type        = list(string)
-}
-
-variable "private_subnets" {
-  description = "Private subnet CIDRs"
-  type        = list(string)
-}
-
-variable "enable_eks_tags" {
-  description = "Enable EKS subnet tags"
-  type        = bool
-  default     = false
 }
 
 variable "cluster_name" {
-  description = "EKS cluster name"
+  description = "EKS cluster name suffix"
   type        = string
-  default     = ""
 }
 
 # -------------------------
@@ -101,12 +104,6 @@ variable "db_password" {
   description = "Master password"
   type        = string
   sensitive   = true
-}
-
-variable "manage_master_user_password" {
-  description = "Use AWS managed master password"
-  type        = bool
-  default     = false
 }
 
 variable "db_port" {
@@ -163,13 +160,13 @@ variable "db_publicly_accessible" {
 }
 
 variable "db_multi_az" {
-  description = "Enable multi AZ"
+  description = "Enable Multi-AZ"
   type        = bool
   default     = false
 }
 
 variable "db_availability_zone" {
-  description = "Preferred AZ"
+  description = "Preferred AZ when Multi-AZ is false"
   type        = string
   default     = null
 }
@@ -241,7 +238,7 @@ variable "db_monitoring_interval" {
 }
 
 variable "db_monitoring_role_arn" {
-  description = "Monitoring role arn"
+  description = "Monitoring role ARN"
   type        = string
   default     = null
 }
@@ -288,18 +285,6 @@ variable "db_character_set_name" {
   default     = null
 }
 
-variable "db_allowed_cidr_blocks" {
-  description = "Allowed CIDR blocks for DB access"
-  type        = list(string)
-  default     = []
-}
-
-variable "db_allowed_security_group_ids" {
-  description = "Allowed security group IDs for DB access"
-  type        = list(string)
-  default     = []
-}
-
 variable "db_parameters" {
   description = "DB parameter group parameters"
   type = list(object({
@@ -330,7 +315,6 @@ variable "db_options" {
   default = []
 }
 
-
 # -------------------------
 # Bastion
 # -------------------------
@@ -353,11 +337,6 @@ variable "bastion_allowed_ssh_cidr_blocks" {
 # -------------------------
 # EKS
 # -------------------------
-variable "eks_cluster_name" {
-  description = "EKS cluster name suffix"
-  type        = string
-}
-
 variable "eks_cluster_version" {
   description = "EKS Kubernetes version"
   type        = string
@@ -446,6 +425,11 @@ variable "eks_auto_mode_enabled" {
   description = "Enable EKS Auto Mode"
   type        = bool
   default     = false
+}
+
+variable "eks_access_principal_arn" {
+  description = "IAM principal ARN to grant EKS cluster admin access"
+  type        = string
 }
 
 # -------------------------

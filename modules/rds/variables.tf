@@ -9,8 +9,13 @@ variable "vpc_id" {
 }
 
 variable "subnet_ids" {
-  description = "Private subnet IDs for DB subnet group"
+  description = "DB subnet IDs for DB subnet group"
   type        = list(string)
+
+  validation {
+    condition     = length(var.subnet_ids) >= 2
+    error_message = "RDS subnet_ids must contain at least two subnet IDs in different AZs."
+  }
 }
 
 variable "db_identifier" {

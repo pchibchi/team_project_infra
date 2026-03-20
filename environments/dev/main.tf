@@ -2,19 +2,7 @@ provider "aws" {
   region = var.aws_region
 }
 
-module "vpc" {
-  source = "../../modules/vpc"
-
-  env             = var.env
-  vpc_cidr        = var.vpc_cidr
-  azs_public      = var.azs_public
-  azs_private     = var.azs_private
-  public_subnets  = var.public_subnets
-  private_subnets = var.private_subnets
-
-  enable_eks_tags = var.enable_eks_tags
-  cluster_name    = var.cluster_name
-
+locals {
   common_tags = {
     Project     = var.project_name
     Environment = var.env
@@ -22,12 +10,79 @@ module "vpc" {
   }
 }
 
+module "vpc" {
+  source = "../../modules/vpc"
+
+  env      = var.env
+  vpc_cidr = var.vpc_cidr
+
+  public_subnets      = var.public_subnets
+  private_app_subnets = var.private_app_subnets
+  private_db_subnets  = var.private_db_subnets
+
+  azs_public      = var.azs_public
+  azs_private_app = var.azs_private_app
+  azs_private_db  = var.azs_private_db
+
+  enable_eks_tags = true
+  cluster_name    = var.cluster_name
+  common_tags     = local.common_tags
+}
+
+module "bastion" {
+  source = "../../modules/bastion"
+
+  env              = var.env
+  vpc_id           = module.vpc.vpc_id
+  public_subnet_id = module.vpc.public_subnet_ids[0]
+
+  instance_type           = var.bastion_instance_type
+  key_name                = var.bastion_key_name
+  allowed_ssh_cidr_blocks = var.bastion_allowed_ssh_cidr_blocks
+
+  common_tags = local.common_tags
+}
+
+module "eks" {
+  source = "../../modules/eks"
+
+  env             = var.env
+  cluster_name    = var.cluster_name
+  cluster_version = var.eks_cluster_version
+  vpc_id          = module.vpc.vpc_id
+
+  cluster_subnet_ids = module.vpc.private_app_subnet_ids
+  node_subnet_ids    = module.vpc.private_app_subnet_ids
+
+  endpoint_private_access                     = var.eks_endpoint_private_access
+  endpoint_public_access                      = var.eks_endpoint_public_access
+  public_access_cidrs                         = var.eks_public_access_cidrs
+  authentication_mode                         = var.eks_authentication_mode
+  bootstrap_cluster_creator_admin_permissions = var.eks_bootstrap_cluster_creator_admin_permissions
+  eks_auto_mode_enabled                       = var.eks_auto_mode_enabled
+
+  capacity_type   = var.eks_capacity_type
+  instance_types  = var.eks_instance_types
+  ami_type        = var.eks_ami_type
+  disk_size       = var.eks_disk_size
+  desired_size    = var.eks_desired_size
+  min_size        = var.eks_min_size
+  max_size        = var.eks_max_size
+  max_unavailable = var.eks_max_unavailable
+
+  admin_principals = {
+    eks_user = var.eks_access_principal_arn
+  }
+
+  common_tags = local.common_tags
+}
+
 module "rds" {
   source = "../../modules/rds"
 
   env        = var.env
   vpc_id     = module.vpc.vpc_id
-  subnet_ids = module.vpc.private_subnet_ids
+  subnet_ids = module.vpc.private_db_subnet_ids
 
   db_identifier          = var.db_identifier
   db_name                = var.db_name
@@ -50,9 +105,9 @@ module "rds" {
   storage_encrypted     = var.db_storage_encrypted
   kms_key_id            = var.db_kms_key_id
 
-  publicly_accessible = var.db_publicly_accessible
+  publicly_accessible = false
   multi_az            = var.db_multi_az
-  availability_zone   = var.db_availability_zone
+  availability_zone   = var.db_multi_az ? null : var.db_availability_zone
 
   backup_retention_period  = var.db_backup_retention_period
   backup_window            = var.db_backup_window
@@ -80,69 +135,18 @@ module "rds" {
   license_model      = var.db_license_model
   character_set_name = var.db_character_set_name
 
-  allowed_cidr_blocks        = var.db_allowed_cidr_blocks
-  allowed_security_group_ids = var.db_allowed_security_group_ids
+  allowed_cidr_blocks = []
+
+  allowed_security_group_ids = [
+    module.bastion.security_group_id,
+    module.eks.node_security_group_id
+  ]
 
   parameters          = var.db_parameters
   create_option_group = var.db_create_option_group
   options             = var.db_options
 
-  common_tags = {
-    Project     = var.project_name
-    Environment = var.env
-    ManagedBy   = "Terraform"
-  }
-}
-
-module "bastion" {
-  source = "../../modules/bastion"
-
-  env              = var.env
-  vpc_id           = module.vpc.vpc_id
-  public_subnet_id = module.vpc.public_subnet_ids[0]
-
-  instance_type           = var.bastion_instance_type
-  key_name                = var.bastion_key_name
-  allowed_ssh_cidr_blocks = var.bastion_allowed_ssh_cidr_blocks
-
-  common_tags = {
-    Project     = var.project_name
-    Environment = var.env
-    ManagedBy   = "Terraform"
-  }
-}
-
-module "eks" {
-  source = "../../modules/eks"
-
-  env          = var.env
-  cluster_name = var.eks_cluster_name
-
-  cluster_version = var.eks_cluster_version
-  vpc_id          = module.vpc.vpc_id
-  subnet_ids      = module.vpc.private_subnet_ids
-
-  endpoint_private_access                     = var.eks_endpoint_private_access
-  endpoint_public_access                      = var.eks_endpoint_public_access
-  public_access_cidrs                         = var.eks_public_access_cidrs
-  authentication_mode                         = var.eks_authentication_mode
-  bootstrap_cluster_creator_admin_permissions = var.eks_bootstrap_cluster_creator_admin_permissions
-  eks_auto_mode_enabled                       = var.eks_auto_mode_enabled
-
-  capacity_type   = var.eks_capacity_type
-  instance_types  = var.eks_instance_types
-  ami_type        = var.eks_ami_type
-  disk_size       = var.eks_disk_size
-  desired_size    = var.eks_desired_size
-  min_size        = var.eks_min_size
-  max_size        = var.eks_max_size
-  max_unavailable = var.eks_max_unavailable
-
-  common_tags = {
-    Project     = var.project_name
-    Environment = var.env
-    ManagedBy   = "Terraform"
-  }
+  common_tags = local.common_tags
 }
 
 module "ecr" {
@@ -157,17 +161,11 @@ module "ecr" {
   create_lifecycle_policy = var.ecr_create_lifecycle_policy
   lifecycle_policy        = var.ecr_lifecycle_policy
 
-  common_tags = {
-    Project     = var.project_name
-    Environment = var.env
-    ManagedBy   = "Terraform"
-  }
+  common_tags = local.common_tags
 }
 
 module "iam_autoscaler" {
-
   source = "../../modules/iam"
 
   oidc_issuer_url = module.eks.cluster_oidc_issuer
-
 }
