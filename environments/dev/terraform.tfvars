@@ -5,21 +5,21 @@ env          = "dev"
 # -------------------------
 # VPC
 # -------------------------
-vpc_cidr = "10.20.0.0/16"
+vpc_cidr = "10.0.0.0/16"
 
 public_subnets = [
-  "10.20.1.0/24",
-  "10.20.2.0/24"
+  "10.0.1.0/24",
+  "10.0.2.0/24"
 ]
 
 private_app_subnets = [
-  "10.20.12.0/22",
-  "10.20.16.0/22"
+  "10.0.12.0/22",
+  "10.0.16.0/22"
 ]
 
 private_db_subnets = [
-  "10.20.24.0/24",
-  "10.20.25.0/24"
+  "10.0.24.0/24",
+  "10.0.25.0/24"
 ]
 
 azs_public = [
@@ -139,10 +139,10 @@ eks_access_principal_arn = "arn:aws:iam::683668078297:user/512-team03"
 # ECR
 # -------------------------
 ecr_repository_names = [
-  "apigateway",
-  "member-service",
-  "ordering-service",
-  "product-service"
+  "team3-apigateway",
+  "team3-member-service",
+  "team3-ordering-service",
+  "team3-product-service"
 ]
 
 ecr_image_tag_mutability    = "MUTABLE"

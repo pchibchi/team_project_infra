@@ -48,7 +48,8 @@ jobs:
         with:
           aws-access-key-id: ${{ secrets.ACCESS_KEY_ID }}
           aws-secret-access-key: ${{ secrets.SECRET_ACCESS_KEY }}
-          #role-to-assume: arn:aws:iam::683668078297:role/githubActionRole
+          # soldesk 계정 identity-based policy 생성 불가로 임시로 accesskey 사용
+          # role-to-assume: arn:aws:iam::683668078297:role/githubActionRole
           aws-region: ap-northeast-2
 
       - name: Terraform Init
