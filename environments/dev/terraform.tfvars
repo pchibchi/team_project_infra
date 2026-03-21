@@ -125,8 +125,8 @@ eks_instance_types = ["t3.small"]
 eks_ami_type       = "AL2023_x86_64_STANDARD"
 eks_disk_size      = 20
 
-eks_desired_size    = 5
-eks_min_size        = 5
+eks_desired_size    = 3
+eks_min_size        = 3
 eks_max_size        = 8
 eks_max_unavailable = 1
 
