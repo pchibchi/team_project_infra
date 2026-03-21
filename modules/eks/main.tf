@@ -106,7 +106,7 @@ resource "aws_vpc_security_group_ingress_rule" "node_from_node_all" {
   description                  = "Allow all traffic between worker nodes"
 }
 
-# Node to Node all traffic
+# Node from cluster admission webhook traffic
 resource "aws_vpc_security_group_ingress_rule" "node_from_cluster_tls" {
   security_group_id            = aws_security_group.node.id
   referenced_security_group_id = aws_security_group.cluster.id
@@ -116,7 +116,7 @@ resource "aws_vpc_security_group_ingress_rule" "node_from_cluster_tls" {
   description                  = "for admission webhook"
 }
 
-# Node -> Cluster API
+# cluster from Node admission webhook traffic
 resource "aws_vpc_security_group_egress_rule" "cluster_from_node_tls" {
   security_group_id            = aws_security_group.cluster.id
   referenced_security_group_id = aws_security_group.node.id
