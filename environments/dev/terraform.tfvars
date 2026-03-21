@@ -43,7 +43,7 @@ cluster_name = "my-cluster"
 # RDS (MySQL)
 # -------------------------
 db_identifier             = "mysql"
-db_name                   = "ordersystem"
+db_name                   = "ordermsa"
 db_engine                 = "mysql"
 db_engine_version         = "8.0"
 db_major_engine_version   = "8.0"
