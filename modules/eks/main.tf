@@ -263,6 +263,10 @@ resource "aws_eks_node_group" "main" {
     var.common_tags,
     {
       Name = "${var.env}-${var.cluster_name}-node-group"
+
+      # Autoscaler Discovery 태그
+      "k8s.io/cluster-autoscaler/enabled"                      = "true"
+      "k8s.io/cluster-autoscaler/${aws_eks_cluster.main.name}" = "owned"
     }
   )
 }
