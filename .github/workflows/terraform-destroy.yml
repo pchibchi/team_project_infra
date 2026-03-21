@@ -41,7 +41,7 @@ jobs:
         run: |
           aws eks update-kubeconfig \
           --region ap-northeast-2 \
-          --name t3-dev-my-cluster
+          --name t3-dev-my-cluster || true
 
       - name: Delete ingress-nginx Service
         run: |
