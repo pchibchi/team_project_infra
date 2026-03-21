@@ -1,25 +1,25 @@
 aws_region   = "ap-northeast-2"
 project_name = "order-system"
-env          = "dev"
+env          = "t3-dev"
 
 # -------------------------
 # VPC
 # -------------------------
-vpc_cidr = "10.0.0.0/16"
+vpc_cidr = "10.30.0.0/16"
 
 public_subnets = [
-  "10.0.1.0/24",
-  "10.0.2.0/24"
+  "10.30.1.0/24",
+  "10.30.2.0/24"
 ]
 
 private_app_subnets = [
-  "10.0.12.0/22",
-  "10.0.16.0/22"
+  "10.30.12.0/22",
+  "10.30.16.0/22"
 ]
 
 private_db_subnets = [
-  "10.0.24.0/24",
-  "10.0.25.0/24"
+  "10.30.24.0/24",
+  "10.30.25.0/24"
 ]
 
 azs_public = [
@@ -37,7 +37,7 @@ azs_private_db = [
   "ap-northeast-2c"
 ]
 
-cluster_name = "my-cluster-team03"
+cluster_name = "my-cluster"
 
 # -------------------------
 # RDS (MySQL)
@@ -105,7 +105,7 @@ bastion_instance_type = "t3.micro"
 bastion_key_name      = "my-key-pair"
 
 bastion_allowed_ssh_cidr_blocks = [
-  "162.120.184.59/32"
+  "0.0.0.0/0"
 ]
 
 # -------------------------
