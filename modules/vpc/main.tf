@@ -39,8 +39,8 @@ resource "aws_subnet" "public" {
       Name = "${var.env}-public-sn-${count.index + 1}"
     },
     var.enable_eks_tags ? {
-      "kubernetes.io/role/elb"                    = "1"
-      "kubernetes.io/cluster/${var.cluster_name}" = "shared"
+      "kubernetes.io/role/elb"                               = "1"
+      "kubernetes.io/cluster/${var.env}-${var.cluster_name}" = "shared"
     } : {}
   )
 }
@@ -62,8 +62,8 @@ resource "aws_subnet" "private_app" {
       Tier = "app"
     },
     var.enable_eks_tags ? {
-      "kubernetes.io/role/internal-elb"           = "1"
-      "kubernetes.io/cluster/${var.cluster_name}" = "shared"
+      "kubernetes.io/role/internal-elb"                      = "1"
+      "kubernetes.io/cluster/${var.env}-${var.cluster_name}" = "shared"
     } : {}
   )
 }
