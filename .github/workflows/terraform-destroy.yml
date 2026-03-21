@@ -37,13 +37,27 @@ jobs:
       - name: Setup kubectl
         uses: azure/setup-kubectl@v4
 
+      - name: Check cluster existence
+        id: check_cluster
+        shell: bash
+        run: |
+          if aws eks describe-cluster \
+            --region ap-northeast-2 \
+            --name t3-dev-my-cluster >/dev/null 2>&1; then
+            echo "exists=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "exists=false" >> "$GITHUB_OUTPUT"
+          fi
+
       - name: Update kubeconfig
+        if: steps.check_cluster.outputs.exists == 'true'
         run: |
           aws eks update-kubeconfig \
           --region ap-northeast-2 \
-          --name t3-dev-my-cluster || true
+          --name t3-dev-my-cluster
 
       - name: Delete ingress-nginx Service
+        if: steps.check_cluster.outputs.exists == 'true'
         run: |
           kubectl delete service ingress-nginx-controller \
             -n ingress-nginx \
