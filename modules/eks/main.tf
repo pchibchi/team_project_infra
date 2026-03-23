@@ -14,13 +14,12 @@ resource "aws_iam_role" "cluster" {
     ]
   })
 
-  # iam:TagRole 권한 부족으로 임시 주석처리
-  # tags = merge(
-  #   var.common_tags,
-  #   {
-  #     Name = "${var.env}-${var.cluster_name}-cluster-role"
-  #   }
-  # )
+  tags = merge(
+    var.common_tags,
+    {
+      Name = "${var.env}-${var.cluster_name}-cluster-role"
+    }
+  )
 }
 
 resource "aws_iam_role_policy_attachment" "cluster_amazon_eks_cluster_policy" {
