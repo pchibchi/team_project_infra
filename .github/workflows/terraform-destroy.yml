@@ -57,6 +57,7 @@ jobs:
           --name t3-dev-my-cluster
 
       - name: Delete ingress-nginx Service
+        id: delete_ingress
         if: steps.check_cluster.outputs.exists == 'true'
         run: |
           kubectl delete service ingress-nginx-controller \
@@ -68,6 +69,7 @@ jobs:
             --timeout=120s || true
 
       - name: Terraform Init
+        if: steps.delete_ingress.outcome == 'success'
         run: terraform init
 
       - name: Terraform Validate
