@@ -143,6 +143,7 @@ ecr_repository_names = [
   "team3-member-service",
   "team3-ordering-service",
   "team3-product-service"
+  "team3-frontend-service",
 ]
 
 ecr_image_tag_mutability    = "MUTABLE"
