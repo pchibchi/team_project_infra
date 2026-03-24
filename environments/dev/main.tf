@@ -169,3 +169,10 @@ module "iam_autoscaler" {
 
   oidc_issuer_url = module.eks.cluster_oidc_issuer
 }
+
+module "s3" {
+  source = "../../modules/s3"
+
+  bucket_name     = var.bucket_name
+  s3_uploader_arn = var.s3_uploader_arn
+}
