@@ -156,5 +156,6 @@ ecr_create_lifecycle_policy = true
 # -------------------------
 # S3
 # -------------------------
-bucket_name="t3-product-shop-images-683668078297"
-s3_uploader_arn="arn:aws:iam::683668078297:user/t3-s3-upload-user"
+bucket_name     = "t3-product-shop-images-683668078297"
+s3_uploader_arn = "arn:aws:iam::683668078297:user/t3-s3-upload-user"
+
