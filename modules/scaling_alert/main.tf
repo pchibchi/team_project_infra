@@ -67,6 +67,7 @@ resource "aws_cloudwatch_event_target" "sns" {
   "cause": "<cause>"
 }
 EOF
+  }
 }
 
 data "aws_iam_policy_document" "sns_topic_policy" {
