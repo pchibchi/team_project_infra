@@ -1,5 +1,12 @@
 resource "aws_sns_topic" "node_scaling_topic" {
   name = "${var.env}-${var.cluster_name}-node-scaling-topic"
+
+  tags = merge(
+    var.common_tags,
+    {
+      Name = "${var.env}-${var.cluster_name}-node-scaling-topic"
+    }
+  )
 }
 
 resource "aws_sns_topic_subscription" "email" {
@@ -24,6 +31,13 @@ resource "aws_cloudwatch_event_rule" "mng_scaling_rule" {
       AutoScalingGroupName = [var.mng_asg_name]
     }
   })
+
+  tags = merge(
+    var.common_tags,
+    {
+      Name = "${var.env}-${var.cluster_name}-mng-scaling-rule"
+    }
+  )
 }
 
 resource "aws_cloudwatch_event_target" "sns" {

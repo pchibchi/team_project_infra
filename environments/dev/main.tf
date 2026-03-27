@@ -184,4 +184,6 @@ module "scaling_alert" {
   cluster_name = var.cluster_name
   mng_asg_name = module.eks.mng_asg_name
   alert_email  = var.alert_email
+
+  common_tags = local.common_tags
 }
