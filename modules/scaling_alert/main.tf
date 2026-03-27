@@ -48,10 +48,13 @@ resource "aws_cloudwatch_event_target" "sns" {
   input_transformer {
     input_paths = {
       event_type  = "$.detail-type"
+      action      = "$.detail.Action"
       asg_name    = "$.detail.AutoScalingGroupName"
       instance_id = "$.detail.EC2InstanceId"
       az          = "$.detail.Details.Availability Zone"
+      subnet_id   = "$.detail.Details.Subnet ID"
       event_time  = "$.time"
+      status_code = "$.detail.StatusCode"
       cause       = "$.detail.Cause"
     }
 
