@@ -44,6 +44,30 @@ resource "aws_cloudwatch_event_target" "sns" {
   rule      = aws_cloudwatch_event_rule.mng_scaling_rule.name
   target_id = "SendToSNS"
   arn       = aws_sns_topic.node_scaling_topic.arn
+
+  input_transformer {
+    input_paths = {
+      event_type  = "$.detail-type"
+      asg_name    = "$.detail.AutoScalingGroupName"
+      instance_id = "$.detail.EC2InstanceId"
+      az          = "$.detail.Details.Availability Zone"
+      event_time  = "$.time"
+      cause       = "$.detail.Cause"
+    }
+
+    input_template = <<EOF
+[EKS Scaling Alert]
+Type: <event_type>
+Cluster: ${var.env}-${var.cluster_name}
+ASG: <asg_name>
+Instance: <instance_id>
+AZ: <az>
+Time: <event_time>
+
+Cause:
+<cause>
+EOF
+  }
 }
 
 data "aws_iam_policy_document" "sns_topic_policy" {
