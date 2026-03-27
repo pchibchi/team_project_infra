@@ -69,7 +69,6 @@ jobs:
             --timeout=120s || true
 
       - name: Terraform Init
-        if: steps.delete_ingress.outcome == 'success'
         run: terraform init
 
       - name: Terraform Validate
