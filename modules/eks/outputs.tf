@@ -37,3 +37,8 @@ output "cluster_oidc_issuer" {
   description = "OIDC issuer URL for the EKS cluster"
   value       = aws_eks_cluster.main.identity[0].oidc[0].issuer
 }
+
+output "mng_asg_name" {
+  description = "ASG name for scaling_alert"
+  value       = data.aws_eks_node_group.mng.resources[0].autoscaling_groups[0].name
+}

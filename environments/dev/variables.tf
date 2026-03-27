@@ -511,3 +511,11 @@ variable "s3_uploader_arn" {
   description = "S3 Uploader ARN"
   type        = string
 }
+
+# -------------------------
+# Scaling_alert
+# -------------------------
+variable "alert_email" {
+  description = "Email address for autoscaling alerts"
+  type        = string
+}

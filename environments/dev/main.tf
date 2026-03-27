@@ -176,3 +176,12 @@ module "s3" {
   bucket_name     = var.bucket_name
   s3_uploader_arn = var.s3_uploader_arn
 }
+
+module "scaling_alert" {
+  source = "../../scaling_alert"
+
+  env          = var.env
+  cluster_name = var.cluster_name
+  mng_asg_name = module.eks.mng_asg_name
+  alert_email  = var.alert_email
+}

@@ -321,3 +321,13 @@ resource "aws_eks_access_policy_association" "admins" {
     aws_eks_access_entry.admins
   ]
 }
+
+#####################################################
+# ASG Name
+#####################################################
+data "aws_eks_node_group" "mng" {
+  cluster_name    = aws_eks_cluster.main.name
+  node_group_name = aws_eks_node_group.main.node_group_name
+
+  depends_on = [aws_eks_node_group.main]
+}
