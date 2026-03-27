@@ -56,16 +56,9 @@ resource "aws_cloudwatch_event_target" "sns" {
     }
 
     input_template = <<EOF
-[EKS Scaling Alert]
-Type: <event_type>
-Cluster: ${var.env}-${var.cluster_name}
-ASG: <asg_name>
-Instance: <instance_id>
-AZ: <az>
-Time: <event_time>
-
-Cause:
-<cause>
+{
+  "message": "[EKS Node Scaling Alert]\\n\\nCluster: ${var.env}-${var.cluster_name}\\nEvent Type: <event_type>\\nAction: <action>\\nASG: <asg_name>\\nInstance: <instance_id>\\nAZ: <az>\\nSubnet: <subnet_id>\\nTime: <event_time>\\nStatus: <status_code>\\n\\nCause:\\n<cause>"
+}
 EOF
   }
 }
