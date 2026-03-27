@@ -178,7 +178,7 @@ module "s3" {
 }
 
 module "scaling_alert" {
-  source = "../../scaling_alert"
+  source = "../../modules/scaling_alert"
 
   env          = var.env
   cluster_name = var.cluster_name
