@@ -57,21 +57,16 @@ resource "aws_cloudwatch_event_target" "sns" {
     }
 
     input_template = <<EOF
-[EKS][${var.env}-${var.cluster_name}] Node Scaling Alert
-
-▶ Event: <event_type>
-▶ Action: <action>
-
-▶ ASG: <asg_name>
-▶ Instance: <instance_id>
-
-▶ Time: <event_time>
-▶ Status: <status_code>
-
-▶ Cause:
-<cause>
+{
+  "cluster": "${var.env}-${var.cluster_name}",
+  "event": "<event_type>",
+  "action": "<action>",
+  "instance": "<instance_id>",
+  "time": "<event_time>",
+  "status": "<status_code>",
+  "cause": "<cause>"
+}
 EOF
-  }
 }
 
 data "aws_iam_policy_document" "sns_topic_policy" {
