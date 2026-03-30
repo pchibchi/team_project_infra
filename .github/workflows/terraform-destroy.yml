@@ -60,13 +60,61 @@ jobs:
         id: delete_ingress
         if: steps.check_cluster.outputs.exists == 'true'
         run: |
+          set -euo pipefail
+
+          LB_DNS="$(kubectl get service ingress-nginx-controller \
+            -n ingress-nginx \
+            -o jsonpath='{.status.loadBalancer.ingress[0].hostname}' 2>/dev/null || true)"
+
+          echo "lb_dns=${LB_DNS}" >> "$GITHUB_OUTPUT"
+
+          if [ -n "${LB_DNS}" ]; then
+            echo "LoadBalancer DNS: ${LB_DNS}"
+          else
+            echo "Load Balancer does not exist."
+          fi
+
           kubectl delete service ingress-nginx-controller \
             -n ingress-nginx \
             --ignore-not-found=true
 
-          kubectl wait --for=delete service ingress-nginx-controller \
+          kubectl wait --for=delete service/ingress-nginx-controller \
             -n ingress-nginx \
-            --timeout=120s || true
+            --timeout=10m
+
+      - name: Wait for Load Balancer to be deleted
+        if: steps.check_cluster.outputs.exists == 'true'
+        run: |
+          set -euo pipefail
+
+          LB_DNS="${{ steps.delete_ingress.outputs.lb_dns }}"
+
+          if [ -z "${LB_DNS}" ]; then
+            echo "LoadBalancer is already deleted."
+            echo "Skip LB wait step."
+            exit 0
+          fi
+
+          echo "Waiting for deleting LB with LB_DNS: ${LB_DNS}"
+
+          for i in {1..40}; do
+            RESULT="$(aws elbv2 describe-load-balancers \
+              --region ap-northeast-2 \
+              --query "LoadBalancers[?DNSName=='${LB_DNS}'].DNSName" \
+              --output text)"
+
+            if [ -z "${RESULT}" ] || [ "${RESULT}" = "None" ]; then
+              echo "Load Balancer for DNS ${LB_DNS} has been deleted."
+              exit 0
+            fi
+
+            echo "Load Balancer still exists: ${RESULT}"
+            echo "Retrying in 15s..."
+            sleep 15
+          done
+
+          echo "Timed out waiting for Load Balancer deletion: ${LB_DNS}"
+          exit 1
 
       - name: Terraform Init
         run: terraform init
